@@ -60,14 +60,24 @@ public class CSVFileHandler extends AbstractFileHandler {
     @Override
     public boolean exportData(String filePath) {
         try (FileWriter writer = new FileWriter(filePath)) {
+            // Export Group Names
+            writer.write("Group Name\n");
+            for (String group : existingGroups) {
+                writer.write(group + "\n");
+            }
+
+            writer.write("\n"); // Add a blank line before student data
+
             // Export Students
             writer.write("ID,First Name,Last Name,Group\n");
             for (Student student : this.students) {
                 writer.write(student.getId() + "," + student.getFirstName() + "," + student.getLastName() + "," + student.getGroup() + "\n");
             }
 
+            writer.write("\n"); // Add a blank line before attendance data
+
             // Export Attendance Records
-            writer.write("\nDate,ID,Attendance Status\n");
+            writer.write("Date,ID,Attendance Status\n");
             for (AttendanceRecord record : this.attendanceRecords) {
                 writer.write(record.getDate() + "," + record.getStudentId() + "," + record.getStatus() + "\n");
             }

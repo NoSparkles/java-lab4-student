@@ -2,6 +2,7 @@ package stud;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -111,22 +112,49 @@ public class PrimaryController {
 
         fileChooser.getExtensionFilters().add(filter);
 
-        File setectedFile = fileChooser.showOpenDialog(importButton.getScene().getWindow());
+        File selectedFile = fileChooser.showOpenDialog(importButton.getScene().getWindow());
         
-        if (setectedFile != null) {
-            System.out.println("Selected file: " + setectedFile.getAbsolutePath());
+        if (selectedFile != null) {
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
         } else {
             System.out.println("File selection cancelled.");
         }
 
-        this.dataManager.importData(setectedFile.getAbsolutePath(), selectedFileType);
+        this.dataManager.importData(selectedFile.getAbsolutePath(), selectedFileType);
 
         this.dataManager.showDataInTableView();
     }
 
     @FXML
     public void handleExportButton() {
-        System.out.println("Exporting data...");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save File");
+
+        FileChooser.ExtensionFilter filter;
+        String selectedFileType = this.importExportChoiceBox.getValue();
+
+        switch (selectedFileType) {
+            case "CSV":
+                filter = new FileChooser.ExtensionFilter("CSV Files", "*.csv");
+                break;
+            case "Excel":
+                filter = new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls");
+                break;
+            default:
+                return;
+        }
+
+        fileChooser.getExtensionFilters().add(filter);
+
+        // Use showSaveDialog instead of showOpenDialog
+        File selectedFile = fileChooser.showSaveDialog(importButton.getScene().getWindow());
+
+        if (selectedFile != null) {
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            this.dataManager.exportData(selectedFile.getAbsolutePath(), selectedFileType);
+        } else {
+            System.out.println("File selection cancelled.");
+        }
     }
 
     @FXML
@@ -138,14 +166,32 @@ public class PrimaryController {
         }
     }
 
+    @FXML 
+    public void handleResetDatePicker() {
+        this.FromDatePicker.setValue(null);
+        this.ToDatePicker.setValue(null);
+    }
+
     @FXML
     public void handleFromDatePicker() {
-        System.out.println("From date: " + this.FromDatePicker.getValue());
+        LocalDate fromDate = this.FromDatePicker.getValue();
+        LocalDate toDate = this.ToDatePicker.getValue();
+
+        if (toDate != null && fromDate.isAfter(toDate)) {
+            System.out.println("Error: From Date cannot be after To Date!");
+            FromDatePicker.setValue(toDate); // Reset From Date to To Date
+        }
     }
 
     @FXML
     public void handleToDatePicker() {
-        System.out.println("To date: " + this.ToDatePicker.getValue());
+        LocalDate fromDate = this.FromDatePicker.getValue();
+        LocalDate toDate = this.ToDatePicker.getValue();
+
+        if (fromDate != null && toDate.isBefore(fromDate)) {
+            System.out.println("Error: To Date cannot be before From Date!");
+            ToDatePicker.setValue(fromDate); // Reset To Date to From Date
+        }
     }
 
     public void handleFilterByChoiceBox(String newValue) {
@@ -159,6 +205,9 @@ public class PrimaryController {
 
     @FXML
     public void handleFilterButton() {
+        if (this.FromDatePicker.getValue() == null || this.ToDatePicker.getValue() == null) {
+            this.handleResetDatePicker();
+        }
         this.dataManager.filterAttendance(this.FromDatePicker.getValue(), this.ToDatePicker.getValue(), this.filterTextField.getText(), this.filterByChoiceBox.getValue(), !this.showOnlyFilledDaysButton.isSelected());
     }
 

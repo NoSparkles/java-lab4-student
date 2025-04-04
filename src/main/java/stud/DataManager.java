@@ -39,7 +39,27 @@ public class DataManager {
             .findFirst()
             .orElse(new Student(studentId, "Unknown", "Unknown", "No Group"));
     }
+
+    public void createStudent(String firstName, String lastName, String group) {
+        if (firstName.isEmpty() || lastName.isEmpty() || group.isEmpty()) {
+            System.out.println("Error: All fields must be filled!");
+            return;
+        }
     
+        int newStudentId = generateNewStudentId();
+        Student newStudent = new Student(newStudentId, firstName, lastName, group);
+    
+        studentLookup.add(newStudent);
+        students.add(newStudent);
+        System.out.println("New Student Created: " + newStudent);
+    }
+    
+    private int generateNewStudentId() {
+        return students.stream()
+                       .mapToInt(Student::getId)
+                       .max()
+                       .orElse(100) + 1; // Default starts at 101 if no students exist
+    }
 
     public List<AttendanceRecord> getAttendanceRecords() {
         return this.attendanceRecords;
@@ -62,51 +82,53 @@ public class DataManager {
     public void filterAttendance(LocalDate fromDate, LocalDate toDate, String groupOrStudent, String filterType, boolean showNull) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
-        // Generate a list of all possible dates in the range
-        List<LocalDate> allDates = new ArrayList<>();
-        LocalDate currentDate = fromDate;
-        while (!currentDate.isAfter(toDate)) {
-            allDates.add(currentDate);
-            currentDate = currentDate.plusDays(1);
-        }
-    
-        // Get students based on filterType (Group OR Student)
+        List<AttendanceRecord> filteredRecords = new ArrayList<>();
         List<Student> studentsToFilter;
-        if (filterType.equals("Student")) {
+    
+        // Determine which students to filter
+        if ("Student".equals(filterType)) {
             studentsToFilter = students.stream()
                 .filter(s -> s.getFirstName().toLowerCase().contains(groupOrStudent.toLowerCase()) 
                           || s.getLastName().toLowerCase().contains(groupOrStudent.toLowerCase()))
                 .collect(Collectors.toList());
-        } else if (filterType.equals("Group")) {
+        } else if ("Group".equals(filterType)) {
             studentsToFilter = students.stream()
                 .filter(s -> s.getGroup().toLowerCase().contains(groupOrStudent.toLowerCase()))
                 .collect(Collectors.toList());
         } else {
             studentsToFilter = new ArrayList<>(students); // No student/group filter
         }
+        // If either fromDate or toDate is null, disable showNull and return existing records only
+        if (fromDate == null || toDate == null) {
+            showNull = false; // Ensure no empty entries are added
     
-        List<AttendanceRecord> filteredRecords = new ArrayList<>();
+            filteredRecords = attendanceRecords.stream()
+                .filter(r -> studentsToFilter.stream().anyMatch(s -> s.getId() == r.getStudentId()))
+                .collect(Collectors.toList());
+        } else {
+            List<LocalDate> allDates = new ArrayList<>();
+            LocalDate currentDate = fromDate;
+            while (!currentDate.isAfter(toDate)) {
+                allDates.add(currentDate);
+                currentDate = currentDate.plusDays(1);
+            }
     
-        // Cycle through each student and each date in the range
-        for (Student student : studentsToFilter) {
-            for (LocalDate date : allDates) {
-                String dateStr = date.format(formatter);
+            // Cycle through each student and each date in the range
+            for (Student student : studentsToFilter) {
+                for (LocalDate date : allDates) {
+                    String dateStr = date.format(formatter);
     
-                // Find existing attendance record
-                AttendanceRecord existingRecord = attendanceRecords.stream()
-                    .filter(r -> r.getStudentId() == student.getId() && r.getDate().equals(dateStr))
-                    .findFirst()
-                    .orElse(null);
+                    // Find existing attendance record
+                    AttendanceRecord existingRecord = attendanceRecords.stream()
+                        .filter(r -> r.getStudentId() == student.getId() && r.getDate().equals(dateStr))
+                        .findFirst()
+                        .orElse(null);
     
-                if (existingRecord != null) {
-                    filteredRecords.add(existingRecord);
-                } else if (showNull) {
-                    // Only add "null" entries if showNull is true
-                    filteredRecords.add(new AttendanceRecord(
-                        student.getId(),
-                        dateStr,
-                        "null"
-                    ));
+                    if (existingRecord != null) {
+                        filteredRecords.add(existingRecord);
+                    } else if (showNull) {
+                        filteredRecords.add(new AttendanceRecord(student.getId(), dateStr, "null"));
+                    }
                 }
             }
         }
@@ -123,10 +145,22 @@ public class DataManager {
     }
 
     public void importData(String filePath, String fileType) {
+        if (this.existingGroups != null && this.students != null && this.attendanceRecords != null && this.studentLookup != null && this.filteredAttendanceRecords != null) {
+            this.existingGroups.clear();
+            this.students.clear();
+            this.attendanceRecords.clear();
+            this.studentLookup.clear();
+            this.filteredAttendanceRecords.clear();
+        }
         this.dataProcessor = DataProcessorFactory.getDataProcessor(fileType, this);
         this.dataProcessor.importData(filePath);
 
         this.studentLookup = new HashSet<>(this.students);
         this.filteredAttendanceRecords = this.attendanceRecords;
+    }
+
+    public void exportData(String filePath, String fileType) {
+        this.dataProcessor = DataProcessorFactory.getDataProcessor(fileType, this);
+        this.dataProcessor.exportData(filePath);
     }
 }

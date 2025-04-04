@@ -13,12 +13,12 @@
       <VBox layoutX="652.0" layoutY="296.0" prefHeight="159.0" prefWidth="196.0" spacing="10.0">
          <children>
             <Label text="Create New Student" />
-            <TextField promptText="First Name" />
-            <TextField promptText="Last Name" />
-            <ChoiceBox prefWidth="150.0" />
+            <TextField fx:id="firstNameField" promptText="First Name" />
+            <TextField fx:id="lastNameField" promptText="Last Name" />
+            <ChoiceBox fx:id="groupChoiceBox" prefWidth="150.0" />
             <HBox alignment="CENTER" prefHeight="26.0" prefWidth="196.0" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" text="Save" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveStudent" text="Save" />
                   <Button mnemonicParsing="false" onAction="#goBack" text="Cancel" />
                </children>
             </HBox>

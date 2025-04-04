@@ -45,6 +45,7 @@
                         <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="1117.0" spacing="10.0">
                            <children>
                               <CheckBox fx:id="showOnlyFilledDaysButton" mnemonicParsing="false" onAction="#handleShowOnlyFilledDaysButton" prefWidth="146.0" text="Show Only Filled Days" />
+                              <Button mnemonicParsing="false" onAction="#handleResetDatePicker" text="Reset Date" />
                               <Label prefHeight="17.0" prefWidth="32.0" text="From:" />
                               <DatePicker fx:id="FromDatePicker" onAction="#handleFromDatePicker" prefHeight="25.0" prefWidth="138.0" />
                               <Label text="To:" />
