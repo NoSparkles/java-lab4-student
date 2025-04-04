@@ -52,7 +52,7 @@
                               <Label prefHeight="17.0" prefWidth="49.0" text="Filter by:" />
                               <ChoiceBox fx:id="filterByChoiceBox" prefHeight="25.0" prefWidth="101.0" />
                               <TextField fx:id="filterTextField" onKeyTyped="#handleFilterTextField" prefHeight="25.0" prefWidth="91.0" promptText="Filter" />
-                              <Button fx:id="filterButton" mnemonicParsing="false" onAction="#handleFilterButton" text="Filter" />
+                              <Button fx:id="filterButton" mnemonicParsing="false" onAction="#handleFilterButton" text="Refresh" />
                               <Button fx:id="addEntryButton" mnemonicParsing="false" onAction="#handleAddEntryButton" text="Add Entry" />
                               <Button fx:id="createStudentButton" mnemonicParsing="false" onAction="#handleCreateStudentButton" text="Create Student" />
                               <Button fx:id="createGroupButton" mnemonicParsing="false" onAction="#handleCreateGroupButton" text="Create Group" />

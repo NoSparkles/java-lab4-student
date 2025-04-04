@@ -38,6 +38,16 @@ public class DataManager {
         return this.attendanceRecords;
     }
 
+    public void addAttendanceRecord(AttendanceRecord newRecord) {
+        // Remove any existing record for the same student and date
+        attendanceRecords.removeIf(record -> 
+            record.getStudentId() == newRecord.getStudentId() && record.getDate().equals(newRecord.getDate())
+        );
+    
+        // Add the new entry
+        attendanceRecords.add(newRecord);
+    }
+
     public List<AttendanceRecord> getFilteredAttendanceRecords() {
         return this.filteredAttendanceRecords;
     }
