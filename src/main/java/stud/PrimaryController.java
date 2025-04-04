@@ -60,7 +60,7 @@ public class PrimaryController {
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
         statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
-        this.dataManager = new DataManager();
+        this.dataManager = new DataManager(this.attendanceTableView);
     }
 
     @FXML
@@ -114,8 +114,7 @@ public class PrimaryController {
             System.out.println("Attendance Record: " + record.getStudentId() + ", " + record.getFirstName() + ", " + record.getLastName() + ", " + record.getDate() + ", " + record.getGroup() + ", " + record.getStatus());
         }
 
-        this.attendanceTableView.getItems().clear();
-        this.dataManager.showDataInTableView(this.attendanceTableView);
+        this.dataManager.showDataInTableView();
     }
 
     @FXML
@@ -153,7 +152,7 @@ public class PrimaryController {
 
     @FXML
     public void handleFilterButton() {
-        System.out.println("Filtering data...");
+        this.dataManager.filterAttendance(this.FromDatePicker.getValue(), this.ToDatePicker.getValue(), this.filterTextField.getText(), this.filterByChoiceBox.getValue());
     }
 
     @FXML
