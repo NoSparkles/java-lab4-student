@@ -85,19 +85,25 @@ public class DataManager {
         List<AttendanceRecord> filteredRecords = new ArrayList<>();
         List<Student> studentsToFilter;
     
+        // Create a new trimmed variable for accurate matching
+        String searchQuery = groupOrStudent.trim().toLowerCase();
+    
         // Determine which students to filter
         if ("Student".equals(filterType)) {
             studentsToFilter = students.stream()
-                .filter(s -> s.getFirstName().toLowerCase().contains(groupOrStudent.toLowerCase()) 
-                          || s.getLastName().toLowerCase().contains(groupOrStudent.toLowerCase()))
+                .filter(s -> String.valueOf(s.getId()).contains(searchQuery) ||  // Match by ID
+                             (s.getFirstName().trim() + " " + s.getLastName().trim()).toLowerCase().contains(searchQuery) || // Match by full name (trimmed)
+                             s.getFirstName().trim().toLowerCase().contains(searchQuery) ||  // Match by first name (trimmed)
+                             s.getLastName().trim().toLowerCase().contains(searchQuery))  // Match by last name (trimmed)
                 .collect(Collectors.toList());
         } else if ("Group".equals(filterType)) {
             studentsToFilter = students.stream()
-                .filter(s -> s.getGroup().toLowerCase().contains(groupOrStudent.toLowerCase()))
+                .filter(s -> s.getGroup().trim().toLowerCase().contains(searchQuery))
                 .collect(Collectors.toList());
         } else {
             studentsToFilter = new ArrayList<>(students); // No student/group filter
         }
+    
         // If either fromDate or toDate is null, disable showNull and return existing records only
         if (fromDate == null || toDate == null) {
             showNull = false; // Ensure no empty entries are added
