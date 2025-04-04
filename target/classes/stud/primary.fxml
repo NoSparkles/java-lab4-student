@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stud.PrimaryController">
    <children>
-      <VBox layoutX="94.0" layoutY="103.0" prefHeight="695.0" prefWidth="1412.0">
+      <VBox layoutX="94.0" layoutY="103.0" prefHeight="695.0" prefWidth="1412.0" spacing="10.0">
          <children>
-            <TableView prefHeight="695.0" prefWidth="1156.0" />
+            <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="355.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="91.0" text="Import/Export as" />
+                  <ChoiceBox fx:id="importExportChoiceBox" prefHeight="25.0" prefWidth="69.0" />
+                  <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImportButton" prefHeight="25.0" prefWidth="80.0" text="Import Data" />
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#handleExportButton" prefHeight="25.0" prefWidth="79.0" text="Export Data" />
+               </children>
+            </HBox>
+            <TableView fx:id="attendanceTableView" prefHeight="695.0" prefWidth="1156.0" />
+            <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="1117.0" spacing="10.0">
+               <children>
+                  <CheckBox fx:id="showOnlyFilledDaysButton" mnemonicParsing="false" onAction="#handleShowOnlyFilledDaysButton" prefWidth="146.0" text="Show Only Filled Days" />
+                  <Label prefHeight="17.0" prefWidth="32.0" text="From:" />
+                  <DatePicker fx:id="FromDatePicker" onAction="#handleFromDatePicker" prefHeight="25.0" prefWidth="138.0" />
+                  <Label text="To:" />
+                  <DatePicker fx:id="ToDatePicker" onAction="#handleToDatePicker" prefHeight="25.0" prefWidth="138.0" />
+                  <Label prefHeight="17.0" prefWidth="49.0" text="Filter by:" />
+                  <ChoiceBox fx:id="filterByChoiceBox" prefHeight="25.0" prefWidth="101.0" />
+                  <TextField fx:id="filterTextField" onKeyTyped="#handleFilterTextField" prefHeight="25.0" prefWidth="91.0" promptText="Filter" />
+                  <Button fx:id="filterButton" mnemonicParsing="false" onAction="#handleFilterButton" text="Filter" />
+                  <Button fx:id="addEntryButton" mnemonicParsing="false" onAction="#handleAddEntryButton" text="Add Entry" />
+                  <Button fx:id="createStudentButton" mnemonicParsing="false" onAction="#handleCreateStudentButton" text="Create Student" />
+                  <Button fx:id="createGroupButton" mnemonicParsing="false" onAction="#handleCreateGroupButton" text="Create Group" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER_LEFT" layoutX="94.0" layoutY="49.0" prefHeight="51.0" prefWidth="458.0" spacing="10.0">
-         <children>
-            <Label prefHeight="17.0" prefWidth="91.0" text="Import/Export as" />
-            <ChoiceBox prefHeight="25.0" prefWidth="128.0" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="106.0" text="Export Data" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Import Data" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="634.0" layoutY="49.0" prefHeight="51.0" prefWidth="872.0" spacing="10.0">
-         <children>
-            <Label prefHeight="17.0" prefWidth="32.0" text="From:" />
-            <DatePicker prefHeight="25.0" prefWidth="138.0" />
-            <Label text="To:" />
-            <DatePicker prefHeight="25.0" prefWidth="138.0" />
-            <Label prefHeight="17.0" prefWidth="49.0" text="Filter by:" />
-            <ChoiceBox prefWidth="150.0" />
-            <Button mnemonicParsing="false" text="Add Entry" />
-            <Button mnemonicParsing="false" text="Create Student" />
-            <Button mnemonicParsing="false" text="Create Group" />
-         </children>
-      </HBox>
    </children>
 </AnchorPane>
