@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
@@ -14,14 +16,18 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 
 public class DataManager {
-    TableView<AttendanceRecord> tableView;
-
-    private List<Student> students;
-    private List<AttendanceRecord> attendanceRecords;
-    private List<AttendanceRecord> filteredAttendaceRecords;
+    private TableView<AttendanceRecord> tableView;
+    private Set<String> existingGroups = new HashSet<>();
+    private List<Student> students = new ArrayList<>();
+    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+    private List<AttendanceRecord> filteredAttendanceRecords;
 
     public DataManager(TableView<AttendanceRecord> tableView) {
         this.tableView = tableView;
+    }
+
+    public Set<String> getExistingGroups() {
+        return this.existingGroups;
     }
 
     public List<Student> getStudents() {
@@ -33,7 +39,7 @@ public class DataManager {
     }
 
     public List<AttendanceRecord> getFilteredAttendanceRecords() {
-        return this.filteredAttendaceRecords;
+        return this.filteredAttendanceRecords;
     }
 
     public void filterAttendance(LocalDate fromDate, LocalDate toDate, String groupOrStudent, String filterType, boolean showNull) {
@@ -56,7 +62,7 @@ public class DataManager {
                 .collect(Collectors.toList());
         } else if (filterType.equals("Group")) {
             studentsToFilter = students.stream()
-                .filter(s -> s.getGroup().equalsIgnoreCase(groupOrStudent))
+                .filter(s -> s.getGroup().toLowerCase().contains(groupOrStudent.toLowerCase()))
                 .collect(Collectors.toList());
         } else {
             studentsToFilter = new ArrayList<>(students); // No student/group filter
@@ -91,54 +97,63 @@ public class DataManager {
             }
         }
     
-        this.filteredAttendaceRecords = filteredRecords;
+        this.filteredAttendanceRecords = filteredRecords;
         this.showDataInTableView();
     }
     
     public void showDataInTableView() {
-        ObservableList<AttendanceRecord> observableRecords = FXCollections.observableArrayList(this.filteredAttendaceRecords);
+        ObservableList<AttendanceRecord> observableRecords = FXCollections.observableArrayList(this.filteredAttendanceRecords);
 
         this.tableView.getItems().clear();
         this.tableView.setItems(observableRecords);
     }
 
     public void importFromCSV(String filePath) {
-        List<Student> students = new ArrayList<>();
-        List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-        boolean isReadingStudents = true;
+        boolean isReadingGroups = true;
+        boolean isReadingStudents = false;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
-                // Empty line separates students from attendance records
+                // Detect section changes
                 if (line.isEmpty()) {
-                    isReadingStudents = false;
+                    if (isReadingGroups) {
+                        isReadingGroups = false;
+                        isReadingStudents = true;
+                    } else if (isReadingStudents) {
+                        isReadingStudents = false;
+                    }
                     continue;
                 }
 
                 String[] fields = line.split(",");
-                if (isReadingStudents) {
-                    // Ignore header
+                if (isReadingGroups) {
+                    // Store unique group names
+                    if (!fields[0].equals("Group Name")) {
+                        existingGroups.add(fields[0]);
+                    }
+                } else if (isReadingStudents) {
+                    // Ignore headers
                     if (fields[0].equals("ID")) continue;
 
                     students.add(new Student(
-                        Integer.parseInt(fields[0]), 
-                        fields[1], 
-                        fields[2], 
+                        Integer.parseInt(fields[0]),
+                        fields[1],
+                        fields[2],
                         fields[3]
                     ));
                 } else {
-                    // Ignore header
+                    // Ignore headers
                     if (fields[0].equals("Date")) continue;
 
                     attendanceRecords.add(new AttendanceRecord(
                         Integer.parseInt(fields[1]),
-                        fields[2], 
-                        fields[3], 
-                        fields[0], 
-                        fields[4], 
+                        fields[2],
+                        fields[3],
+                        fields[0],
+                        fields[4],
                         fields[5]
                     ));
                 }
@@ -147,10 +162,9 @@ public class DataManager {
             System.err.println("Error reading CSV file: " + e.getMessage());
         }
 
-        this.students = students;
-        this.attendanceRecords = attendanceRecords;
-        this.filteredAttendaceRecords = attendanceRecords;
+        this.filteredAttendanceRecords = this.attendanceRecords;
     }
+
 
     public void importFromExcel(String filePath) {
         // Implement Excel import logic here

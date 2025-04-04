@@ -1,11 +1,13 @@
 package stud;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -13,29 +15,35 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 
 public class PrimaryController {
-    @FXML ChoiceBox<String> importExportChoiceBox;
-    @FXML Button importButton;
-    @FXML Button exportButton;
+    @FXML private StackPane rootPane;
+    @FXML private Pane mainPane;
+    @FXML private Pane addEntryPane;
 
-    @FXML CheckBox showOnlyFilledDaysButton;
-    @FXML DatePicker FromDatePicker;
-    @FXML DatePicker ToDatePicker;
-    @FXML ChoiceBox<String> filterByChoiceBox;
-    @FXML TextField filterTextField;
-    @FXML Button filterButton;
-    @FXML Button addEntryButton;
-    @FXML Button createStudentButton;
-    @FXML Button createGroupButton;
+    @FXML private ChoiceBox<String> importExportChoiceBox;
+    @FXML private Button importButton;
+    @FXML private Button exportButton;
+
+    @FXML private CheckBox showOnlyFilledDaysButton;
+    @FXML private DatePicker FromDatePicker;
+    @FXML private DatePicker ToDatePicker;
+    @FXML private ChoiceBox<String> filterByChoiceBox;
+    @FXML private TextField filterTextField;
+    @FXML private Button filterButton;
+    @FXML private Button addEntryButton;
+    @FXML private Button createStudentButton;
+    @FXML private Button createGroupButton;
 
     @FXML TableView<AttendanceRecord> attendanceTableView;
     @FXML private TableColumn<AttendanceRecord, String> dateColumn;
     @FXML private TableColumn<AttendanceRecord, Integer> studentIdColumn;
     @FXML private TableColumn<AttendanceRecord, String> nameColumn;
+    @FXML private TableColumn<AttendanceRecord, String> groupColumn;
     @FXML private TableColumn<AttendanceRecord, String> statusColumn;
-
 
     DataManager dataManager;
 
@@ -57,6 +65,7 @@ public class PrimaryController {
 
         dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
         studentIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getStudentId()).asObject());
+        groupColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGroup()));
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
         statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
@@ -157,7 +166,18 @@ public class PrimaryController {
 
     @FXML
     public void handleAddEntryButton() {
-        System.out.println("Adding entry...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddEntry.fxml"));
+            Pane addEntryPane = loader.load();
+            this.rootPane.getChildren().clear();
+            this.rootPane.getChildren().add(addEntryPane);
+
+            AddEntryController addEntryController = loader.getController();
+            addEntryController.setPanes(this.rootPane, this.mainPane);
+            addEntryController.setDataManager(this.dataManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
