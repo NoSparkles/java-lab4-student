@@ -109,11 +109,7 @@ public class PrimaryController {
             System.out.println("File selection cancelled.");
         }
 
-        if (selectedFileType.equals("CSV")) {
-            this.dataManager.importFromCSV(setectedFile.getAbsolutePath());
-        } else if (selectedFileType.equals("Excel")) {
-            this.dataManager.importFromExcel(setectedFile.getAbsolutePath());
-        }
+        this.dataManager.importData(setectedFile.getAbsolutePath(), selectedFileType);
 
         for (Student student : this.dataManager.getStudents()) {
             System.out.println("Student: " + student.getId() + ", " + student.getFirstName() + ", " + student.getLastName() + ", " + student.getGroup());

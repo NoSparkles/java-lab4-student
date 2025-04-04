@@ -1,8 +1,5 @@
 package stud;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ public class DataManager {
     private List<Student> students = new ArrayList<>();
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
     private List<AttendanceRecord> filteredAttendanceRecords;
+    private DataProcessor dataProcessor;
 
     public DataManager(TableView<AttendanceRecord> tableView) {
         this.tableView = tableView;
@@ -118,95 +116,10 @@ public class DataManager {
         this.tableView.setItems(observableRecords);
     }
 
-    public void importFromCSV(String filePath) {
-        boolean isReadingGroups = true;
-        boolean isReadingStudents = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-
-                // Detect section changes
-                if (line.isEmpty()) {
-                    if (isReadingGroups) {
-                        isReadingGroups = false;
-                        isReadingStudents = true;
-                    } else if (isReadingStudents) {
-                        isReadingStudents = false;
-                    }
-                    continue;
-                }
-
-                String[] fields = line.split(",");
-                if (isReadingGroups) {
-                    // Store unique group names
-                    if (!fields[0].equals("Group Name")) {
-                        existingGroups.add(fields[0]);
-                    }
-                } else if (isReadingStudents) {
-                    // Ignore headers
-                    if (fields[0].equals("ID")) continue;
-
-                    students.add(new Student(
-                        Integer.parseInt(fields[0]),
-                        fields[1],
-                        fields[2],
-                        fields[3]
-                    ));
-                } else {
-                    // Ignore headers
-                    if (fields[0].equals("Date")) continue;
-
-                    attendanceRecords.add(new AttendanceRecord(
-                        Integer.parseInt(fields[1]),
-                        fields[2],
-                        fields[3],
-                        fields[0],
-                        fields[4],
-                        fields[5]
-                    ));
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading CSV file: " + e.getMessage());
-        }
+    public void importData(String filePath, String fileType) {
+        this.dataProcessor = DataProcessorFactory.getDataProcessor(fileType, this);
+        this.dataProcessor.importData(filePath);
 
         this.filteredAttendanceRecords = this.attendanceRecords;
-    }
-
-
-    public void importFromExcel(String filePath) {
-        // Implement Excel import logic here
-    }
-
-    public boolean exportStudentsToCSV(List<Student> students, String filePath) {
-        // Implement CSV export logic here
-        return false;
-    }
-
-    public boolean exportStudentsToExcel(List<Student> students, String filePath) {
-        // Implement Excel export logic here
-        return false;
-    }
-
-    public boolean exportStudentsToPDF(List<Student> students, String filePath) {
-        // Implement PDF export logic here
-        return false;
-    }
-
-    public boolean exportAttendanceToCSV(List<AttendanceRecord> attendanceRecords, String filePath) {
-        // Implement CSV export logic here
-        return false;
-    }
-
-    public boolean exportAttendanceToExcel(List<AttendanceRecord> attendanceRecords, String filePath) {
-        // Implement Excel export logic here
-        return false;
-    }
-
-    public boolean exportAttendanceToPDF(List<AttendanceRecord> attendanceRecords, String filePath) {
-        // Implement PDF export logic here
-        return false;
     }
 }
