@@ -6,9 +6,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataManager {
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
-    public DataContainer importFromCSV(String filePath) {
+public class DataManager {
+    private List<Student> students;
+    private List<AttendanceRecord> attendanceRecords;
+    private List<AttendanceRecord> filteredAttendaceRecords;
+
+    public List<Student> getStudents() {
+        return this.students;
+    }
+
+    public List<AttendanceRecord> getAttendanceRecords() {
+        return this.attendanceRecords;
+    }
+
+    public List<AttendanceRecord> getFilteredAttendanceRecords() {
+        return this.filteredAttendaceRecords;
+    }
+
+    public void showDataInTableView(TableView<AttendanceRecord> tableView) {
+        if (this.filteredAttendaceRecords == null || this.filteredAttendaceRecords.isEmpty()) {
+            System.out.println("No attendance records available.");
+            return;
+        }
+
+        ObservableList<AttendanceRecord> observableRecords = FXCollections.observableArrayList(this.filteredAttendaceRecords);
+
+        tableView.setItems(observableRecords);
+    }
+
+
+    public void importFromCSV(String filePath) {
         List<Student> students = new ArrayList<>();
         List<AttendanceRecord> attendanceRecords = new ArrayList<>();
         boolean isReadingStudents = true;
@@ -53,12 +84,13 @@ public class DataManager {
             System.err.println("Error reading CSV file: " + e.getMessage());
         }
 
-        return new DataContainer(students, attendanceRecords);
+        this.students = students;
+        this.attendanceRecords = attendanceRecords;
+        this.filteredAttendaceRecords = attendanceRecords;
     }
 
-    public DataContainer importFromExcel(String filePath) {
+    public void importFromExcel(String filePath) {
         // Implement Excel import logic here
-        return new DataContainer(List.of(), List.of());
     }
 
     public boolean exportStudentsToCSV(List<Student> students, String filePath) {

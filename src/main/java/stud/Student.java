@@ -1,6 +1,6 @@
 package stud;
 
-class Student {
+public class Student {
     private int id;
     private String firstName;
     private String lastName;

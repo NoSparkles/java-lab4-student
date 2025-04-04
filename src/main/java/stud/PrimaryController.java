@@ -2,12 +2,15 @@ package stud;
 
 import java.io.File;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -28,9 +31,13 @@ public class PrimaryController {
     @FXML Button createGroupButton;
 
     @FXML TableView<AttendanceRecord> attendanceTableView;
+    @FXML private TableColumn<AttendanceRecord, String> dateColumn;
+    @FXML private TableColumn<AttendanceRecord, Integer> studentIdColumn;
+    @FXML private TableColumn<AttendanceRecord, String> nameColumn;
+    @FXML private TableColumn<AttendanceRecord, String> statusColumn;
+
 
     DataManager dataManager;
-    DataContainer dataContainer;
 
     @FXML
     public void initialize() {
@@ -48,8 +55,12 @@ public class PrimaryController {
             this.handleFilterByChoiceBox(newValue);
         });
 
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
+        studentIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getStudentId()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
+        statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
+
         this.dataManager = new DataManager();
-        this.dataContainer = null;
     }
 
     @FXML
@@ -91,17 +102,20 @@ public class PrimaryController {
         }
 
         if (selectedFileType.equals("CSV")) {
-            this.dataContainer = this.dataManager.importFromCSV(setectedFile.getAbsolutePath());
+            this.dataManager.importFromCSV(setectedFile.getAbsolutePath());
         } else if (selectedFileType.equals("Excel")) {
-            this.dataContainer = this.dataManager.importFromExcel(setectedFile.getAbsolutePath());
+            this.dataManager.importFromExcel(setectedFile.getAbsolutePath());
         }
 
-        for (Student student : this.dataContainer.getStudents()) {
+        for (Student student : this.dataManager.getStudents()) {
             System.out.println("Student: " + student.getId() + ", " + student.getFirstName() + ", " + student.getLastName() + ", " + student.getGroup());
         }
-        for (AttendanceRecord record : this.dataContainer.getAttendanceRecords()) {
+        for (AttendanceRecord record : this.dataManager.getAttendanceRecords()) {
             System.out.println("Attendance Record: " + record.getStudentId() + ", " + record.getFirstName() + ", " + record.getLastName() + ", " + record.getDate() + ", " + record.getGroup() + ", " + record.getStatus());
         }
+
+        this.attendanceTableView.getItems().clear();
+        this.dataManager.showDataInTableView(this.attendanceTableView);
     }
 
     @FXML

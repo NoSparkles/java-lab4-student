@@ -1,6 +1,6 @@
 package stud;
 
-class AttendanceRecord {
+public class AttendanceRecord {
     int studentId;
     String firstName;
     String lastName;
