@@ -68,7 +68,7 @@ public class AddEntryController {
             return;
         }
 
-        AttendanceRecord newRecord = new AttendanceRecord(student.getId(), student.getFirstName(), student.getLastName(), date, student.getGroup(), status);
+        AttendanceRecord newRecord = new AttendanceRecord(student.getId(), date, status);
         dataManager.addAttendanceRecord(newRecord);
 
         System.out.println("New Entry Saved: " + newRecord);

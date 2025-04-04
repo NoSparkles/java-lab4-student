@@ -64,8 +64,18 @@ public class PrimaryController {
 
         dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
         studentIdColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getStudentId()).asObject());
-        groupColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGroup()));
-        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName()));
+
+        // **Retrieve name based on stored studentId**
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+            dataManager.getStudentById(cellData.getValue().getStudentId()).getFirstName() + " " +
+            dataManager.getStudentById(cellData.getValue().getStudentId()).getLastName()
+        ));
+
+        // **Retrieve group based on stored studentId**
+        groupColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+            dataManager.getStudentById(cellData.getValue().getStudentId()).getGroup()
+        ));
+
         statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
         this.dataManager = new DataManager(this.attendanceTableView);
@@ -110,13 +120,6 @@ public class PrimaryController {
         }
 
         this.dataManager.importData(setectedFile.getAbsolutePath(), selectedFileType);
-
-        for (Student student : this.dataManager.getStudents()) {
-            System.out.println("Student: " + student.getId() + ", " + student.getFirstName() + ", " + student.getLastName() + ", " + student.getGroup());
-        }
-        for (AttendanceRecord record : this.dataManager.getAttendanceRecords()) {
-            System.out.println("Attendance Record: " + record.getStudentId() + ", " + record.getFirstName() + ", " + record.getLastName() + ", " + record.getDate() + ", " + record.getGroup() + ", " + record.getStatus());
-        }
 
         this.dataManager.showDataInTableView();
     }

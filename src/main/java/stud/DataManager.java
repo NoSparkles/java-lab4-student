@@ -16,6 +16,7 @@ public class DataManager {
     private TableView<AttendanceRecord> tableView;
     private Set<String> existingGroups = new HashSet<>();
     private List<Student> students = new ArrayList<>();
+    private Set<Student> studentLookup = new HashSet<>();
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
     private List<AttendanceRecord> filteredAttendanceRecords;
     private DataProcessor dataProcessor;
@@ -31,6 +32,14 @@ public class DataManager {
     public List<Student> getStudents() {
         return this.students;
     }
+
+    public Student getStudentById(int studentId) {
+        return studentLookup.stream()
+            .filter(student -> student.getId() == studentId)
+            .findFirst()
+            .orElse(new Student(studentId, "Unknown", "Unknown", "No Group"));
+    }
+    
 
     public List<AttendanceRecord> getAttendanceRecords() {
         return this.attendanceRecords;
@@ -95,10 +104,7 @@ public class DataManager {
                     // Only add "null" entries if showNull is true
                     filteredRecords.add(new AttendanceRecord(
                         student.getId(),
-                        student.getFirstName(),
-                        student.getLastName(),
                         dateStr,
-                        student.getGroup(),
                         "null"
                     ));
                 }
@@ -120,6 +126,7 @@ public class DataManager {
         this.dataProcessor = DataProcessorFactory.getDataProcessor(fileType, this);
         this.dataProcessor.importData(filePath);
 
+        this.studentLookup = new HashSet<>(this.students);
         this.filteredAttendanceRecords = this.attendanceRecords;
     }
 }

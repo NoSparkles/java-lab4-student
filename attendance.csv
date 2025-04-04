@@ -9,13 +9,13 @@ ID,First Name,Last Name,Group
 103,Laura,Lauraitė,IT2025
 104,Povilas,Povilaitis,IT2025
 
-Date,ID,First Name,Last Name,Group,Attendance Status
-2025-04-01,101,Jonas,Jonaitis,IT2025,Present
-2025-04-01,102,Mantas,Mantaitis,IT2025,Present
-2025-04-01,103,Laura,Lauraitė,IT2025,Absent
-2025-04-02,101,Jonas,Jonaitis,IT2025,Absent
-2025-04-02,102,Mantas,Mantaitis,IT2025,Present
-2025-04-02,103,Laura,Lauraitė,IT2025,Present
-2025-04-03,101,Jonas,Jonaitis,IT2025,Present
-2025-04-03,102,Mantas,Mantaitis,IT2025,Absent
-2025-04-03,103,Laura,Lauraitė,IT2025,Present
+Date,ID,Attendance Status
+2025-04-01,101,Present
+2025-04-01,102,Present
+2025-04-01,103,Absent
+2025-04-02,101,Absent
+2025-04-02,102,Present
+2025-04-02,103,Present
+2025-04-03,101,Present
+2025-04-03,102,Absent
+2025-04-03,103,Present
