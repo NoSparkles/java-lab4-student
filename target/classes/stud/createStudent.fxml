@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stud.CreateStudentController">
+   <children>
+      <VBox layoutX="652.0" layoutY="296.0" prefHeight="159.0" prefWidth="196.0" spacing="10.0">
+         <children>
+            <Label text="Create New Student" />
+            <TextField promptText="First Name" />
+            <TextField promptText="Last Name" />
+            <ChoiceBox prefWidth="150.0" />
+            <HBox alignment="CENTER" prefHeight="26.0" prefWidth="196.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Save" />
+                  <Button mnemonicParsing="false" onAction="#goBack" text="Cancel" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</Pane>

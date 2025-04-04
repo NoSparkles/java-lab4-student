@@ -22,7 +22,6 @@ import javafx.stage.FileChooser;
 public class PrimaryController {
     @FXML private StackPane rootPane;
     @FXML private Pane mainPane;
-    @FXML private Pane addEntryPane;
 
     @FXML private ChoiceBox<String> importExportChoiceBox;
     @FXML private Button importButton;
@@ -167,7 +166,7 @@ public class PrimaryController {
     @FXML
     public void handleAddEntryButton() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddEntry.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("addEntry.fxml"));
             Pane addEntryPane = loader.load();
             this.rootPane.getChildren().clear();
             this.rootPane.getChildren().add(addEntryPane);
@@ -182,7 +181,18 @@ public class PrimaryController {
 
     @FXML
     public void handleCreateStudentButton() {
-        System.out.println("Creating student...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("createStudent.fxml"));
+            Pane createStudentPane = loader.load();
+            this.rootPane.getChildren().clear();
+            this.rootPane.getChildren().add(createStudentPane);
+
+            CreateStudentController createStudentController = loader.getController();
+            createStudentController.setPanes(this.rootPane, this.mainPane);
+            createStudentController.setDataManager(this.dataManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
