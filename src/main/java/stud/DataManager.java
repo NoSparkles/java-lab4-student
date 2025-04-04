@@ -36,7 +36,7 @@ public class DataManager {
         return this.filteredAttendaceRecords;
     }
 
-    public void filterAttendance(LocalDate fromDate, LocalDate toDate, String groupOrStudent, String filterType) {
+    public void filterAttendance(LocalDate fromDate, LocalDate toDate, String groupOrStudent, String filterType, boolean showNull) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
         // Generate a list of all possible dates in the range
@@ -47,7 +47,7 @@ public class DataManager {
             currentDate = currentDate.plusDays(1);
         }
     
-        // Get all students for filtering
+        // Get students based on filterType (Group OR Student)
         List<Student> studentsToFilter;
         if (filterType.equals("Student")) {
             studentsToFilter = students.stream()
@@ -69,7 +69,7 @@ public class DataManager {
             for (LocalDate date : allDates) {
                 String dateStr = date.format(formatter);
     
-                // Find existing records for the student on this date
+                // Find existing attendance record
                 AttendanceRecord existingRecord = attendanceRecords.stream()
                     .filter(r -> r.getStudentId() == student.getId() && r.getDate().equals(dateStr))
                     .findFirst()
@@ -77,8 +77,8 @@ public class DataManager {
     
                 if (existingRecord != null) {
                     filteredRecords.add(existingRecord);
-                } else {
-                    // Create a new attendance record with "null" status
+                } else if (showNull) {
+                    // Only add "null" entries if showNull is true
                     filteredRecords.add(new AttendanceRecord(
                         student.getId(),
                         student.getFirstName(),

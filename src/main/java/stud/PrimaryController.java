@@ -152,7 +152,7 @@ public class PrimaryController {
 
     @FXML
     public void handleFilterButton() {
-        this.dataManager.filterAttendance(this.FromDatePicker.getValue(), this.ToDatePicker.getValue(), this.filterTextField.getText(), this.filterByChoiceBox.getValue());
+        this.dataManager.filterAttendance(this.FromDatePicker.getValue(), this.ToDatePicker.getValue(), this.filterTextField.getText(), this.filterByChoiceBox.getValue(), !this.showOnlyFilledDaysButton.isSelected());
     }
 
     @FXML
