@@ -1,0 +1,21 @@
+Group Name
+MAT2025
+1
+2
+IT2025
+CS2025
+
+ID,First Name,Last Name,Group
+101,Jonas,Jonaitis,IT2025
+102,Mantas,Mantaitis,IT2025
+103,Laura,Lauraitė,IT2025
+104,Povilas,Povilaitis,IT2025
+105,rob,sat,1
+106,arrrr,ssssss,2
+
+Date,ID,Attendance Status
+2025-04-03,101,Present
+2025-04-03,102,Absent
+2025-04-03,103,Present
+2025-04-04,105,Absent
+2025-04-06,105,Absent

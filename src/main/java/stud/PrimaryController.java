@@ -168,8 +168,12 @@ public class PrimaryController {
 
     @FXML 
     public void handleResetDatePicker() {
+        this.showOnlyFilledDaysButton.setSelected(false);
+        this.filterTextField.setText("");
+        this.filterByChoiceBox.setValue("None");
         this.FromDatePicker.setValue(null);
         this.ToDatePicker.setValue(null);
+        this.dataManager.filterAttendance(this.FromDatePicker.getValue(), this.ToDatePicker.getValue(), this.filterTextField.getText(), this.filterByChoiceBox.getValue(), !this.showOnlyFilledDaysButton.isSelected());
     }
 
     @FXML

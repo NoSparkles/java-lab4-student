@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 public class CSVFileHandler extends AbstractFileHandler {
-    public CSVFileHandler(Set<String> existingGroups, List<Student> students, List<AttendanceRecord> attendanceRecords) {
-        super(existingGroups, students, attendanceRecords);
+    public CSVFileHandler(Set<String> existingGroups, List<Student> students, List<AttendanceRecord> attendanceRecords, List<AttendanceRecord> filteredAttendanceRecords) {
+        super(existingGroups, students, attendanceRecords, filteredAttendanceRecords);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CSVFileHandler extends AbstractFileHandler {
         try (FileWriter writer = new FileWriter(filePath)) {
             // Export Group Names
             writer.write("Group Name\n");
-            for (String group : existingGroups) {
+            for (String group : this.existingGroups) {
                 writer.write(group + "\n");
             }
 
@@ -76,10 +76,12 @@ public class CSVFileHandler extends AbstractFileHandler {
 
             writer.write("\n"); // Add a blank line before attendance data
 
-            // Export Attendance Records
+            // Export Attendance Records (skip records where status is "null")
             writer.write("Date,ID,Attendance Status\n");
-            for (AttendanceRecord record : this.attendanceRecords) {
-                writer.write(record.getDate() + "," + record.getStudentId() + "," + record.getStatus() + "\n");
+            for (AttendanceRecord record : this.filteredAttendanceRecords) {
+                if (!"null".equalsIgnoreCase(record.getStatus())) {
+                    writer.write(record.getDate() + "," + record.getStudentId() + "," + record.getStatus() + "\n");
+                }
             }
 
             return true;

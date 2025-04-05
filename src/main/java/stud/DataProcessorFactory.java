@@ -3,7 +3,7 @@ package stud;
 public class DataProcessorFactory {
     static public DataProcessor getDataProcessor(String fileType, DataManager dataManager) {
         if (fileType.equalsIgnoreCase("CSV")) {
-            return new CSVFileHandler(dataManager.getExistingGroups(), dataManager.getStudents(), dataManager.getAttendanceRecords());
+            return new CSVFileHandler(dataManager.getExistingGroups(), dataManager.getStudents(), dataManager.getAttendanceRecords(), dataManager.getFilteredAttendanceRecords());
         } else if (fileType.equalsIgnoreCase("Excel")) {
             // to do:
         } else if (fileType.equalsIgnoreCase("PDF")){
