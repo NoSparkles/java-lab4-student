@@ -42,7 +42,7 @@ public class AddEntryController {
     private void populateStudents() {
     studentChoiceBox.setItems(FXCollections.observableArrayList(
         dataManager.getStudents().stream()
-            .map(s -> s.getFirstName() + " " + s.getLastName())
+            .map(s -> s.getId() + " "+ s.getFirstName() + " " + s.getLastName())
             .collect(Collectors.toList()) // Corrected method
     ));
 }
@@ -59,7 +59,7 @@ public class AddEntryController {
         String status = statusChoiceBox.getValue();
 
         Student student = dataManager.getStudents().stream()
-            .filter(s -> (s.getFirstName() + " " + s.getLastName()).equals(selectedStudent))
+            .filter(s -> (s.getId() + " " + s.getFirstName() + " " + s.getLastName()).equals(selectedStudent))
             .findFirst()
             .orElse(null);
 
