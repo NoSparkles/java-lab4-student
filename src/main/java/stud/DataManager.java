@@ -29,12 +29,17 @@ public class DataManager {
         return this.existingGroups;
     }
 
+    public void addGroup(String groupName) {
+        this.existingGroups.add(groupName);
+    }
+    
+
     public List<Student> getStudents() {
         return this.students;
     }
 
     public Student getStudentById(int studentId) {
-        return studentLookup.stream()
+        return this.studentLookup.stream()
             .filter(student -> student.getId() == studentId)
             .findFirst()
             .orElse(new Student(studentId, "Unknown", "Unknown", "No Group"));

@@ -245,6 +245,17 @@ public class PrimaryController {
 
     @FXML
     public void handleCreateGroupButton() {
-        System.out.println("Creating group...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("createGroup.fxml"));
+            Pane createStudentPane = loader.load();
+            this.rootPane.getChildren().clear();
+            this.rootPane.getChildren().add(createStudentPane);
+
+            CreateGroupController createGroupController = loader.getController();
+            createGroupController.setPanes(this.rootPane, this.mainPane);
+            createGroupController.setDataManager(this.dataManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

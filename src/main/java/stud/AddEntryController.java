@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -18,6 +19,7 @@ public class AddEntryController {
     @FXML private ChoiceBox<String> studentChoiceBox;
     @FXML private DatePicker datePicker;
     @FXML private ChoiceBox<String> statusChoiceBox;
+    @FXML private Label errorLabel;
 
     @FXML
     public void initialize() {
@@ -50,7 +52,7 @@ public class AddEntryController {
     @FXML
     public void handleSaveEntry() {
         if (studentChoiceBox.getValue() == null || datePicker.getValue() == null || statusChoiceBox.getValue() == null) {
-            System.out.println("Error: All fields must be filled!");
+            errorLabel.setText("Error: All fields must be filled!");
             return;
         }
 

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -16,6 +17,7 @@ public class CreateStudentController {
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private Button saveButton;
+    @FXML private Label errorLabel;
 
     private DataManager dataManager;
 
@@ -38,7 +40,7 @@ public class CreateStudentController {
     @FXML
     public void handleSaveStudent() {
         if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || groupChoiceBox.getValue() == null) {
-            System.out.println("Error: All fields must be filled!");
+            errorLabel.setText("Error: All fields must be filled!");
             return;
         }
 

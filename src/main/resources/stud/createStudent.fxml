@@ -10,8 +10,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stud.CreateStudentController">
    <children>
-      <VBox layoutX="652.0" layoutY="296.0" prefHeight="159.0" prefWidth="196.0" spacing="10.0">
+      <VBox layoutX="615.0" layoutY="283.0" prefHeight="184.0" prefWidth="271.0" spacing="10.0">
          <children>
+            <Label fx:id="errorLabel" alignment="CENTER" prefHeight="17.0" prefWidth="271.0" />
             <Label text="Create New Student" />
             <TextField fx:id="firstNameField" promptText="First Name" />
             <TextField fx:id="lastNameField" promptText="Last Name" />
