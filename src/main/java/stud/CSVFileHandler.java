@@ -19,10 +19,10 @@ public class CSVFileHandler extends AbstractFileHandler {
             boolean readingGroups = true;
             boolean readingStudents = false;
             boolean readingAttendance = false;
-
+    
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-
+    
                 // Detect section changes
                 if (line.isEmpty()) {
                     if (readingGroups) {
@@ -34,9 +34,9 @@ public class CSVFileHandler extends AbstractFileHandler {
                     }
                     continue;
                 }
-
+    
                 String[] fields = line.split(",");
-
+    
                 if (readingGroups) {
                     if (!fields[0].equals("Group Name")) { 
                         existingGroups.add(fields[0]); // Store unique group names
@@ -47,7 +47,8 @@ public class CSVFileHandler extends AbstractFileHandler {
                         existingGroups.add(fields[3]); // Ensure the group is stored
                     }
                 } else if (readingAttendance) { 
-                    if (!fields[0].equals("Date") && fields.length == 3) {
+                    if (!fields[0].equals("Date") && fields.length == 3 && !"null".equalsIgnoreCase(fields[2])) { 
+                        // Skip attendance records where status is "null"
                         attendanceRecords.add(new AttendanceRecord(Integer.parseInt(fields[1]), fields[0], fields[2]));
                     }
                 }
@@ -76,12 +77,10 @@ public class CSVFileHandler extends AbstractFileHandler {
 
             writer.write("\n"); // Add a blank line before attendance data
 
-            // Export Attendance Records (skip records where status is "null")
+            // Export Attendance Records
             writer.write("Date,ID,Attendance Status\n");
             for (AttendanceRecord record : this.filteredAttendanceRecords) {
-                if (!"null".equalsIgnoreCase(record.getStatus())) {
-                    writer.write(record.getDate() + "," + record.getStudentId() + "," + record.getStatus() + "\n");
-                }
+                writer.write(record.getDate() + "," + record.getStudentId() + "," + record.getStatus() + "\n");
             }
 
             return true;

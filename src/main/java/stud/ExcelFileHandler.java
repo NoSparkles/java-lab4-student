@@ -60,17 +60,22 @@ public class ExcelFileHandler extends AbstractFileHandler {
 
     private void importAttendanceRecords(Sheet sheet) {
         if (sheet == null) return;
-
+    
         for (Row row : sheet) {
             if (row.getRowNum() == 0) continue; // Skip header row
-
-            attendanceRecords.add(new AttendanceRecord(
-                (int) row.getCell(1).getNumericCellValue(),
-                getCellValue(row.getCell(0)),
-                getCellValue(row.getCell(2))
-            ));
+    
+            String status = getCellValue(row.getCell(2));
+    
+            if (!"null".equalsIgnoreCase(status)) { // Skip "null" status records
+                attendanceRecords.add(new AttendanceRecord(
+                    (int) row.getCell(1).getNumericCellValue(),
+                    getCellValue(row.getCell(0)),
+                    status
+                ));
+            }
         }
     }
+    
 
     @Override
     public boolean exportData(String filePath) {
@@ -125,12 +130,10 @@ public class ExcelFileHandler extends AbstractFileHandler {
 
         int rowIndex = 1;
         for (AttendanceRecord record : this.filteredAttendanceRecords) {
-            if (!"null".equalsIgnoreCase(record.getStatus())) {
-                Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(record.getDate());
-                row.createCell(1).setCellValue(record.getStudentId());
-                row.createCell(2).setCellValue(record.getStatus());
-            }
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(record.getDate());
+            row.createCell(1).setCellValue(record.getStudentId());
+            row.createCell(2).setCellValue(record.getStatus());
         }
     }
 
