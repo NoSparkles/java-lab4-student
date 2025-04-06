@@ -5,7 +5,7 @@ public class DataProcessorFactory {
         if (fileType.equalsIgnoreCase("CSV")) {
             return new CSVFileHandler(dataManager.getExistingGroups(), dataManager.getStudents(), dataManager.getAttendanceRecords(), dataManager.getFilteredAttendanceRecords());
         } else if (fileType.equalsIgnoreCase("Excel")) {
-            // to do:
+            return new ExcelFileHandler(dataManager.getExistingGroups(), dataManager.getStudents(), dataManager.getAttendanceRecords(), dataManager.getFilteredAttendanceRecords());
         } else if (fileType.equalsIgnoreCase("PDF")){
             System.out.println("Unsupported file type: " + fileType);
         }
