@@ -23,6 +23,16 @@ public class DataManager {
 
     public DataManager(TableView<AttendanceRecord> tableView) {
         this.tableView = tableView;
+
+        // Add event handler for row deletion
+        this.tableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Double-click to delete
+                AttendanceRecord selectedRecord = tableView.getSelectionModel().getSelectedItem();
+                if (selectedRecord != null && selectedRecord.getStatus() != "null") {
+                    this.deleteAttendanceRecord(selectedRecord);
+                }
+            }
+        });
     }
 
     public Set<String> getExistingGroups() {
@@ -78,6 +88,13 @@ public class DataManager {
     
         // Add the new entry
         attendanceRecords.add(newRecord);
+    }
+
+    public void deleteAttendanceRecord(AttendanceRecord record) {
+        attendanceRecords.remove(record); // Remove from main list
+        filteredAttendanceRecords.remove(record); // Remove from filtered list
+        showDataInTableView(); // Refresh the table
+        System.out.println("Deleted Record: " + record);
     }
 
     public List<AttendanceRecord> getFilteredAttendanceRecords() {
