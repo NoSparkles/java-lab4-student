@@ -2,14 +2,15 @@ stud\AttendanceRecord.class
 stud\AddEntryController.class
 stud\CreateGroupController.class
 stud\Student.class
+stud\PDFFileHandler.class
 stud\CSVFileHandler.class
 stud\DataManager.class
 stud\DataProcessorFactory.class
 stud\ExcelFileHandler$1.class
 stud\App.class
 stud\DataProcessor.class
-module-info.class
 stud\CreateStudentController.class
 stud\AbstractFileHandler.class
 stud\ExcelFileHandler.class
+stud\PDFFileHandler$PageState.class
 stud\PrimaryController.class

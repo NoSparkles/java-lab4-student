@@ -106,6 +106,9 @@ public class PrimaryController {
             case "Excel":
                 filter = new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls");
                 break;
+            case "PDF":
+                filter = new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
+                break;
             default:
                 return;
         }
@@ -139,6 +142,9 @@ public class PrimaryController {
                 break;
             case "Excel":
                 filter = new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls");
+                break;
+            case "PDF":
+                filter = new FileChooser.ExtensionFilter("PDF Files", "*.pdf");
                 break;
             default:
                 return;
