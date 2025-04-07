@@ -79,16 +79,14 @@ public class PDFFileHandler extends AbstractFileHandler {
             tableY = drawTableHeader(document, contentStream, font, "Attendance Records", new String[]{"Date", "ID", "Status"}, tableY);
 
             for (AttendanceRecord record : this.filteredAttendanceRecords) {
-                if (!"null".equalsIgnoreCase(record.getStatus())) {
-                    state = checkPageOverflow(document, contentStream, font, tableY);
-                    contentStream = state.contentStream;
-                    tableY = state.y;
-                    tableY = drawTableRow(document, contentStream, font, new String[]{
-                            record.getDate(),
-                            String.valueOf(record.getStudentId()),
-                            record.getStatus()
-                    }, tableY);
-                }
+                state = checkPageOverflow(document, contentStream, font, tableY);
+                contentStream = state.contentStream;
+                tableY = state.y;
+                tableY = drawTableRow(document, contentStream, font, new String[]{
+                        record.getDate(),
+                        String.valueOf(record.getStudentId()),
+                        record.getStatus()
+                }, tableY);
             }
 
             contentStream.close();
