@@ -21,11 +21,23 @@ public class Student {
         return this.firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return this.lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getGroup() {
         return this.group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

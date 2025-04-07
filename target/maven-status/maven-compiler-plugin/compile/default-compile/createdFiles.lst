@@ -12,5 +12,6 @@ stud\DataProcessor.class
 stud\CreateStudentController.class
 stud\AbstractFileHandler.class
 stud\ExcelFileHandler.class
+stud\UpdateStudentController.class
 stud\PDFFileHandler$PageState.class
 stud\PrimaryController.class

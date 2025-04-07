@@ -251,6 +251,22 @@ public class PrimaryController {
     }
 
     @FXML
+    public void handleUpdateStudentButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("updateStudent.fxml"));
+            Pane updateStudentPane = loader.load();
+            this.rootPane.getChildren().clear();
+            this.rootPane.getChildren().add(updateStudentPane);
+
+            UpdateStudentController updateStudentController = loader.getController();
+            updateStudentController.setPanes(this.rootPane, this.mainPane);
+            updateStudentController.setDataManager(this.dataManager);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void handleCreateGroupButton() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("createGroup.fxml"));
