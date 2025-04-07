@@ -1,0 +1,2 @@
+all:
+	mvn javafx:run
